@@ -435,8 +435,9 @@ const CHECKOUT_LINKS = {
 const ORDER = ["comparer","overwhelmed","waiter","achiever","trapped","blank"];
 const SHORT_NAME = {
   comparer:"Comparer", overwhelmed:"Overwhelmed", waiter:"Perfectionist Waiter",
-  achiever:"Empty Achiever", trapped:"Trapped", blank:"Blank Slate"
+  achiever:"Empty Achiever", trapped:"Trapped", blank:"Blank Slate", none:"Feels okay"
 };
+const DISPLAY_ORDER = [...ORDER, "none"];
 
 /* ============ PAIN GRID CONTENT ============ */
 const PAIN_CARDS = [
@@ -467,7 +468,8 @@ const QUESTIONS = [
       { t: "I figure the plan can wait until I actually feel ready", k: "waiter" },
       { t: "More of the same — doing it all \u201cright\u201d, feeling nothing", k: "achiever" },
       { t: "I see it clearly, then immediately see what's in the way", k: "trapped" },
-      { t: "Nothing, really. It's just static", k: "blank" }
+      { t: "Nothing, really. It's just static", k: "blank" },
+      { t: "Honestly? I feel okay about this one", k: "none" }
   ]},
   { text: "Scrolling at 1am, what's the first feeling that hits?", options: [
       { t: "A quiet \u201cI'm behind\u201d before I even register why", k: "comparer" },
@@ -475,7 +477,8 @@ const QUESTIONS = [
       { t: "\u201cI'll start once things settle down\u201d", k: "waiter" },
       { t: "A flat, \u201cso what\u201d kind of numbness", k: "achiever" },
       { t: "\u201cMust be nice to have that option\u201d", k: "trapped" },
-      { t: "Nothing much — it's just something to do with my hands", k: "blank" }
+      { t: "Nothing much — it's just something to do with my hands", k: "blank" },
+      { t: "Nothing much, honestly — I don't spiral about this", k: "none" }
   ]},
   { text: "Be honest — what actually stops you most?", options: [
       { t: "The sense that everyone else already figured it out", k: "comparer" },
@@ -483,7 +486,8 @@ const QUESTIONS = [
       { t: "Not feeling motivated or ready enough yet", k: "waiter" },
       { t: "Nothing stops me — I just don't feel anything when I get there", k: "achiever" },
       { t: "Actual constraints: money, visa, family, location", k: "trapped" },
-      { t: "Not knowing what I'd even be moving toward", k: "blank" }
+      { t: "Not knowing what I'd even be moving toward", k: "blank" },
+      { t: "Nothing really — this part isn't what's holding me back", k: "none" }
   ]},
   { text: "Someone asks: \u201cwhat do you actually enjoy?\u201d — what happens?", options: [
       { t: "I think of the answer that sounds most impressive first", k: "comparer" },
@@ -491,7 +495,8 @@ const QUESTIONS = [
       { t: "I know the answer, I just haven't done anything with it", k: "waiter" },
       { t: "I list my routine, but nothing on the list excites me", k: "achiever" },
       { t: "I know exactly, and it's frustrating that I can't act on it", k: "trapped" },
-      { t: "I go quiet. Genuinely nothing comes to mind", k: "blank" }
+      { t: "I go quiet. Genuinely nothing comes to mind", k: "blank" },
+      { t: "I actually have a real answer, and it feels solid", k: "none" }
   ]},
   { text: "What would your ideal next step actually feel like?", options: [
       { t: "Finally not feeling like I'm behind anymore", k: "comparer" },
@@ -499,7 +504,8 @@ const QUESTIONS = [
       { t: "Starting before I feel ready, on purpose", k: "waiter" },
       { t: "Finding one thing that actually feels like something", k: "achiever" },
       { t: "Making real progress despite the constraints", k: "trapped" },
-      { t: "Just having a direction to even start testing", k: "blank" }
+      { t: "Just having a direction to even start testing", k: "blank" },
+      { t: "Honestly, I'm not sure this question applies to me right now", k: "none" }
   ]},
   { text: "Which line hits closest to home?", options: [
       { t: "\u201cEveryone else seems further along than me.\u201d", k: "comparer" },
@@ -507,7 +513,8 @@ const QUESTIONS = [
       { t: "\u201cI'll start once I actually feel ready.\u201d", k: "waiter" },
       { t: "\u201cI'm doing everything right and still feel empty.\u201d", k: "achiever" },
       { t: "\u201cI know exactly what I want and still can't get there.\u201d", k: "trapped" },
-      { t: "\u201cI genuinely don't know what I want.\u201d", k: "blank" }
+      { t: "\u201cI genuinely don't know what I want.\u201d", k: "blank" },
+      { t: "\u201cNone of these actually sound like me.\u201d", k: "none" }
   ]}
 ];
 
@@ -613,22 +620,26 @@ function selectAnswer(key){
 function goBack(){ if(current > 0){ current--; renderQuestion(); } }
 
 function scoreBreakdown(){
-  const counts = {}; ORDER.forEach(k=>counts[k]=0);
+  const counts = {}; DISPLAY_ORDER.forEach(k=>counts[k]=0);
   answers.forEach(k=>{ counts[k] = (counts[k]||0)+1; });
   const total = answers.length;
-  const pct = {}; ORDER.forEach(k=> pct[k] = Math.round((counts[k]/total)*100));
+  const pct = {}; DISPLAY_ORDER.forEach(k=> pct[k] = Math.round((counts[k]/total)*100));
   let best = ORDER[0]; ORDER.forEach(k=>{ if(counts[k] > counts[best]) best = k; });
-  return { pct, best };
+  return { pct, counts, best };
 }
 
 function finishQuiz(){
-  const { pct, best } = scoreBreakdown();
+  const { pct, counts, best } = scoreBreakdown();
   lastResult = { key: best, pct };
   const r = RESULTS[best];
 
   document.getElementById('result-mark').innerHTML = markDots(r.color);
   document.getElementById('result-title').textContent = r.title;
-  document.getElementById('result-sub').textContent = r.sub;
+
+  // If nothing dominates strongly, say so honestly instead of forcing a fit
+  const softMessage = "Nothing here dominated strongly — which is a good sign. This is just whatever came up most, even if only a little.";
+  document.getElementById('result-sub').textContent = counts[best] <= 2 ? softMessage : r.sub;
+
   document.getElementById('result-body').innerHTML = r.body;
   document.getElementById('offer-title').textContent = r.offerTitle;
   document.getElementById('cta-btn').href = CHECKOUT_LINKS[best];
@@ -637,12 +648,12 @@ function finishQuiz(){
   tonightList.innerHTML = '';
   r.tonight.forEach(item=>{ const li = document.createElement('li'); li.textContent = item; tonightList.appendChild(li); });
 
-  const sorted = [...ORDER].sort((a,b)=> pct[b]-pct[a]).slice(0,3);
+  const sorted = [...DISPLAY_ORDER].sort((a,b)=> pct[b]-pct[a]).slice(0,3);
   const bars = document.getElementById('score-bars');
   bars.innerHTML = '';
-  sorted.forEach((k,i)=>{
+  sorted.forEach((k)=>{
     const row = document.createElement('div'); row.className = 'score-row';
-    row.innerHTML = `<div class="score-name">${SHORT_NAME[k]}</div><div class="score-track"><div class="score-fill ${i===0?'top':''}"></div></div><div class="score-pct">${pct[k]}%</div>`;
+    row.innerHTML = `<div class="score-name">${SHORT_NAME[k]}</div><div class="score-track"><div class="score-fill ${k===best?'top':''}"></div></div><div class="score-pct">${pct[k]}%</div>`;
     bars.appendChild(row);
     setTimeout(()=>{ row.querySelector('.score-fill').style.width = pct[k]+'%'; }, 60);
   });
@@ -650,6 +661,7 @@ function finishQuiz(){
   showScreen('screen-result');
 }
 function restart(){ showScreen('screen-intro'); current = 0; answers.length = 0; }
+
 
 /* ============ SHARE CARD ============ */
 function downloadCard(){
@@ -681,7 +693,7 @@ function downloadCard(){
   ctx.font = '400 34px Inter, sans-serif';
   ctx.fillText(r.sub, W/2, 460);
 
-  const sorted = [...ORDER].sort((a,b)=> lastResult.pct[b]-lastResult.pct[a]).slice(0,3);
+  const sorted = [...DISPLAY_ORDER].sort((a,b)=> lastResult.pct[b]-lastResult.pct[a]).slice(0,3);
   let y = 620;
   sorted.forEach((k,i)=>{
     ctx.textAlign = 'left'; ctx.fillStyle = palette.text; ctx.font = '500 30px Inter, sans-serif';
