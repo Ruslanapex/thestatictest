@@ -5,6 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Static Test — What's actually keeping you stuck?</title>
 <meta name="description" content="A 60-second diagnostic for the six specific reasons people feel stuck — with a free breakdown and a $19 roadmap built for your exact pattern.">
+<link rel="canonical" href="https://thestatictest.com/">
+<meta name="theme-color" content="#12131c">
+
+<!-- Open Graph / social share preview -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://thestatictest.com/">
+<meta property="og:title" content="The Static Test — What's actually keeping you stuck?">
+<meta property="og:description" content="A 60-second diagnostic for the six specific reasons people feel stuck — with a free breakdown and a $19 roadmap built for your exact pattern.">
+<meta property="og:image" content="https://thestatictest.com/og-image.png">
+<!-- NOTE: create a 1200x630 image (brand colors, headline text) and upload it at this path before launch — without it, links shared on social/iMessage show no preview image -->
+
+<!-- Twitter card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Static Test — What's actually keeping you stuck?">
+<meta name="twitter:description" content="A 60-second diagnostic for the six specific reasons people feel stuck — with a free breakdown and a $19 roadmap built for your exact pattern.">
+<meta name="twitter:image" content="https://thestatictest.com/og-image.png">
+
+<!-- Structured data: helps both classic SEO and AI answer engines (AEO) parse the FAQ directly -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "The Static Test",
+  "url": "https://thestatictest.com/",
+  "description": "A 60-second diagnostic for the six specific reasons people feel stuck, with a free breakdown and a personalized action roadmap."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is this a replacement for therapy?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No, and it's not pretending to be. It's a practical starting point for people who want to move without booking an appointment or explaining themselves to anyone first." }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is the quiz free?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Because a label alone isn't worth paying for. The quiz and the free breakdown are genuinely useful on their own — the $19 Roadmap is for people who want the full plan, not just the diagnosis." }
+    },
+    {
+      "@type": "Question",
+      "name": "What if I get a different result if I retake the quiz?",
+      "acceptedAnswer": { "@type": "Answer", "text": "That happens, and it's fine — most people sit close to two patterns at once. Go with whichever result actually made you go 'oh'." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my quiz data stored anywhere?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No email or account is required to see your result, and your answers aren't stored or sent anywhere — the whole quiz runs in your browser." }
+    }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -93,6 +149,41 @@
   .hero p.lead{ color:var(--text-muted); font-size:clamp(16px,2.4vw,19px); max-width:520px; margin:0 auto 36px; }
   .hero-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:20px; }
   .hero-note{ color:var(--text-muted); font-size:13px; }
+
+  /* ---- hero mockup: a static preview of an actual quiz result, breaks up text-only hero ---- */
+  .hero-mockup{ position:relative; max-width:380px; margin:56px auto 0; }
+  .hero-mockup-glow{
+    position:absolute; inset:-30px; background:radial-gradient(circle, rgba(139,127,214,.25), transparent 70%);
+    filter:blur(20px); z-index:0; pointer-events:none;
+  }
+  .mockup-card{
+    position:relative; z-index:1; background:var(--bg-card); border:1px solid var(--border);
+    border-radius:20px; padding:28px 24px; text-align:center;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.5);
+    transform:rotate(-1.2deg);
+    animation:mockupFloat 6s ease-in-out infinite;
+  }
+  @keyframes mockupFloat{ 0%,100%{ transform:rotate(-1.2deg) translateY(0); } 50%{ transform:rotate(-1.2deg) translateY(-8px); } }
+  .mockup-dots{ display:flex; gap:5px; justify-content:center; margin-bottom:16px; }
+  .mockup-dots span{ width:6px; height:6px; border-radius:50%; background:var(--border); }
+  .mockup-mark{ width:40px; height:40px; margin:0 auto 12px; }
+  .mockup-eyebrow{ font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--violet); font-weight:700; margin-bottom:6px; }
+  .mockup-title{ font-family:'Fraunces',serif; font-size:22px; font-weight:600; margin-bottom:4px; }
+  .mockup-sub{ color:var(--text-muted); font-size:12.5px; margin-bottom:20px; }
+  .mockup-bars{ text-align:left; }
+  .mockup-bar-row{ display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:11px; }
+  .mockup-bar-row span{ width:82px; color:var(--text-muted); flex-shrink:0; }
+  .mockup-track{ flex:1; height:6px; background:var(--bg); border-radius:99px; overflow:hidden; }
+  .mockup-fill{ height:100%; border-radius:99px; background:var(--border); }
+  .mockup-bar-row b{ width:30px; text-align:right; color:var(--text-muted); font-weight:500; flex-shrink:0; }
+
+  /* ---- scroll reveal ---- */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .mockup-card{ animation:none; }
+  }
 
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
@@ -277,13 +368,36 @@
       <a href="#how" class="btn-outline">How it works</a>
     </div>
     <div class="hero-note">No email required to see your result.</div>
+
+    <div class="hero-mockup" id="heroMockup">
+      <div class="hero-mockup-glow"></div>
+      <div class="mockup-card">
+        <div class="mockup-dots"><span></span><span></span><span></span></div>
+        <svg class="mockup-mark" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="30" stroke="var(--violet)" stroke-width="1.2" opacity="0.5"/>
+          <circle cx="32" cy="14" r="4" fill="var(--violet)"/>
+          <circle cx="50" cy="32" r="2.4" fill="var(--border)"/>
+          <circle cx="32" cy="50" r="2.4" fill="var(--border)"/>
+          <circle cx="14" cy="32" r="2.4" fill="var(--border)"/>
+          <line x1="32" y1="14" x2="32" y2="32" stroke="var(--violet)" stroke-width="1"/>
+        </svg>
+        <div class="mockup-eyebrow">Your result</div>
+        <div class="mockup-title">The Blank Slate</div>
+        <div class="mockup-sub">Not overwhelmed — just empty</div>
+        <div class="mockup-bars">
+          <div class="mockup-bar-row"><span>Blank Slate</span><div class="mockup-track"><div class="mockup-fill" style="width:67%; background:linear-gradient(90deg,var(--violet),var(--accent));"></div></div><b>67%</b></div>
+          <div class="mockup-bar-row"><span>Overwhelmed</span><div class="mockup-track"><div class="mockup-fill" style="width:17%;"></div></div><b>17%</b></div>
+          <div class="mockup-bar-row"><span>Trapped</span><div class="mockup-track"><div class="mockup-fill" style="width:17%;"></div></div><b>17%</b></div>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
 <!-- ================= PAIN / ARCHETYPES ================= -->
 <section class="section">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="tag">Six patterns</span>
       <h2>There's a version of "stuck" that actually fits you</h2>
       <p>Most advice assumes everyone's stuck the same way. They're not. Here's what the six most common patterns actually sound like.</p>
@@ -295,22 +409,22 @@
 <!-- ================= HOW IT WORKS ================= -->
 <section class="section" id="how" style="background:var(--bg-alt); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="tag">The process</span>
       <h2>Free diagnosis. Paid plan. No fluff between them.</h2>
     </div>
     <div class="steps">
-      <div class="step">
+      <div class="step reveal">
         <div class="num">1</div>
         <h3>Take the 60-second quiz</h3>
         <p>Six questions, no email required. Answer honestly — there's no "right" answer to perform.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="num">2</div>
         <h3>Get your real pattern</h3>
         <p>Not a generic label — a full breakdown with a score across all six, plus three things to try tonight, free.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="num">3</div>
         <h3>Get your full Roadmap — $19</h3>
         <p>A 7-day plan, a direction-finding worksheet, and 20+ concrete moves built for your exact pattern.</p>
@@ -384,24 +498,24 @@
 <!-- ================= FAQ ================= -->
 <section class="section">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="tag">Before you start</span>
       <h2>Questions people actually ask</h2>
     </div>
     <div style="max-width:680px; margin:0 auto;">
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary>Is this a replacement for therapy?</summary>
         <p>No, and it's not pretending to be. It's a practical starting point for people who want to move without booking an appointment or explaining themselves to anyone first. If what you're feeling goes deeper than direction, talking to a professional is worth it — this just isn't gatekept behind that.</p>
       </details>
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary>Why is the quiz free?</summary>
         <p>Because a label alone isn't worth paying for. The quiz and the free breakdown are genuinely useful on their own — the $19 Roadmap is for people who want the full plan, not just the diagnosis.</p>
       </details>
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary>What if I get a different result if I retake it?</summary>
         <p>That happens, and it's fine — most people sit close to two patterns at once. Go with whichever result actually made you go "oh." That reaction is more reliable than the exact score.</p>
       </details>
-      <details class="faq-item">
+      <details class="faq-item reveal">
         <summary>Is my quiz data stored anywhere?</summary>
         <p>No email or account is required to see your result, and your answers aren't stored or sent anywhere — the whole quiz runs in your browser.</p>
       </details>
@@ -453,7 +567,7 @@ function renderPainGrid(){
   const grid = document.getElementById('painGrid');
   PAIN_CARDS.forEach(card=>{
     const el = document.createElement('div');
-    el.className = 'pain-card';
+    el.className = 'pain-card reveal';
     el.innerHTML = `<div class="dot" style="background:${card.c}"></div><h3>${card.title}</h3><p>${card.text}</p>`;
     grid.appendChild(el);
   });
@@ -738,6 +852,20 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight){
     s.style.animationDuration = (10+Math.random()*8)+'s';
     field.appendChild(s);
   }
+})();
+
+/* ============ SCROLL REVEAL ============ */
+(function(){
+  const items = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  items.forEach(el=> io.observe(el));
 })();
 
 /* ============ STICKY CTA VISIBILITY ============ */
